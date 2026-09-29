@@ -1,0 +1,1066 @@
+{
+    "name": "Integration Gmail",
+    "flow": [
+        {
+            "id": 1,
+            "module": "google-email:triggerWatchNewEmails",
+            "version": 4,
+            "parameters": {
+                "__IMTCONN__": 11375801,
+                "filterType": "simpleSearch",
+                "format": "full",
+                "folder": "INBOX",
+                "criteria": "all",
+                "markSeen": false,
+                "limit": 10,
+                "from": "",
+                "subject": "",
+                "includeWords": "",
+                "excludeWords": "",
+                "size": {
+                    "criteria": "larger",
+                    "amount": null,
+                    "unit": "M"
+                },
+                "hasAttachment": false
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -39,
+                    "y": -2,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Connection: Value must not be empty."
+                        }
+                    ]
+                },
+                "setupValidation": {
+                    "version": 1,
+                    "configuration": "edb59b0dfd40e6d2",
+                    "result": {
+                        "valid": false,
+                        "fields": [
+                            {
+                                "domain": "parameters",
+                                "path": "__IMTCONN__",
+                                "label": "Connection",
+                                "errors": [
+                                    {
+                                        "message": "Value must not be empty.",
+                                        "code": "validate-bundle-param-required"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Hirusha's Gmail connection",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google-email"
+                            }
+                        },
+                        "filterType": {
+                            "label": "Simple filter"
+                        },
+                        "format": {
+                            "label": "Full content"
+                        },
+                        "folder": {
+                            "label": "Inbox"
+                        },
+                        "criteria": {
+                            "label": "All messages"
+                        },
+                        "size": {
+                            "nested": {
+                                "criteria": {
+                                    "label": "Greater than"
+                                },
+                                "unit": {
+                                    "label": "MB (megabytes)"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google-email",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "filterType",
+                        "type": "select",
+                        "label": "Filter type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "simpleSearch",
+                                "gmailSearch"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "format",
+                        "type": "select",
+                        "label": "Content format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "full",
+                                "raw",
+                                "metadata",
+                                "minimal"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "folder",
+                        "type": "select",
+                        "label": "Folder",
+                        "required": true
+                    },
+                    {
+                        "name": "labelIds",
+                        "type": "select",
+                        "label": "Label"
+                    },
+                    {
+                        "name": "criteria",
+                        "type": "select",
+                        "label": "Criteria",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "all",
+                                "is:read",
+                                "is:unread"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "markSeen",
+                        "type": "boolean",
+                        "label": "Mark email message(s) as read when fetched"
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit",
+                        "validate": {
+                            "max": 500
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "from",
+                        "type": "email",
+                        "label": "Sender email address"
+                    },
+                    {
+                        "name": "subject",
+                        "type": "text",
+                        "label": "Subject"
+                    },
+                    {
+                        "name": "includeWords",
+                        "type": "text",
+                        "label": "Has the words"
+                    },
+                    {
+                        "name": "excludeWords",
+                        "type": "text",
+                        "label": "Doesn't have"
+                    },
+                    {
+                        "name": "size",
+                        "type": "collection",
+                        "label": "Email size",
+                        "spec": [
+                            {
+                                "name": "criteria",
+                                "type": "select",
+                                "label": "Criteria",
+                                "validate": {
+                                    "enum": [
+                                        "larger",
+                                        "smaller"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "amount",
+                                "type": "integer",
+                                "label": "Size",
+                                "validate": {
+                                    "min": 0
+                                }
+                            },
+                            {
+                                "name": "unit",
+                                "type": "select",
+                                "label": "Size unit",
+                                "validate": {
+                                    "enum": [
+                                        "M",
+                                        "K",
+                                        "bytes"
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "hasAttachment",
+                        "type": "boolean",
+                        "label": "Only emails with attachments/media",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "Message ID"
+                    },
+                    {
+                        "name": "threadId",
+                        "type": "text",
+                        "label": "Thread ID"
+                    },
+                    {
+                        "name": "internalDate",
+                        "type": "date",
+                        "label": "Date"
+                    },
+                    {
+                        "name": "subject",
+                        "type": "text",
+                        "label": "Subject",
+                        "condition": true
+                    },
+                    {
+                        "name": "fromName",
+                        "type": "text",
+                        "label": "From (name)",
+                        "condition": true
+                    },
+                    {
+                        "name": "fromEmail",
+                        "type": "text",
+                        "label": "From (email)",
+                        "condition": true
+                    },
+                    {
+                        "name": "to",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "name",
+                                    "type": "text",
+                                    "label": "Name"
+                                },
+                                {
+                                    "name": "email",
+                                    "type": "text",
+                                    "label": "Email"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "To",
+                        "condition": true
+                    },
+                    {
+                        "name": "cc",
+                        "spec": [
+                            {
+                                "name": "email",
+                                "type": "email",
+                                "label": "Email"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "CC",
+                        "condition": true
+                    },
+                    {
+                        "name": "bcc",
+                        "spec": [
+                            {
+                                "name": "email",
+                                "type": "email",
+                                "label": "Email"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "BCC",
+                        "condition": true
+                    },
+                    {
+                        "name": "snippet",
+                        "type": "text",
+                        "label": "Snippet"
+                    },
+                    {
+                        "name": "fullTextBody",
+                        "type": "text",
+                        "label": "Full text body",
+                        "condition": true
+                    },
+                    {
+                        "name": "htmlBody",
+                        "type": "text",
+                        "label": "HTML body",
+                        "condition": true
+                    },
+                    {
+                        "name": "hasAttachment",
+                        "type": "boolean",
+                        "label": "Has attachment",
+                        "condition": true
+                    },
+                    {
+                        "name": "hasMedia",
+                        "type": "boolean",
+                        "label": "Has media",
+                        "condition": true
+                    },
+                    {
+                        "name": "sysFolders",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "System folder ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "System folder name"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "System folders"
+                    },
+                    {
+                        "name": "categoryFolders",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "Category folder ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Category folder name"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Category folders"
+                    },
+                    {
+                        "name": "userLabelFolders",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "User label folder ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "User label folder name"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "User label folders"
+                    },
+                    {
+                        "name": "labelIds",
+                        "spec": {
+                            "type": "text"
+                        },
+                        "type": "array",
+                        "label": "Message folder IDs"
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "Delivered-To",
+                                "type": "text",
+                                "label": "Delivered-To"
+                            },
+                            {
+                                "name": "Received",
+                                "type": "text",
+                                "label": "Received"
+                            },
+                            {
+                                "name": "Date",
+                                "type": "text",
+                                "label": "Date (header)"
+                            },
+                            {
+                                "name": "X-Original-Sender",
+                                "type": "text"
+                            },
+                            {
+                                "name": "Reply-To",
+                                "type": "text"
+                            },
+                            {
+                                "name": "Subject",
+                                "type": "text",
+                                "label": "Subject"
+                            },
+                            {
+                                "name": "From",
+                                "type": "text",
+                                "label": "From"
+                            },
+                            {
+                                "name": "To",
+                                "type": "text",
+                                "label": "To"
+                            },
+                            {
+                                "name": "Message-ID",
+                                "type": "text",
+                                "label": "Message-ID"
+                            },
+                            {
+                                "name": "In-Reply-To",
+                                "type": "text",
+                                "label": "In-Reply-To"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Headers",
+                        "condition": true
+                    },
+                    {
+                        "name": "sizeEstimate",
+                        "type": "number",
+                        "label": "Size estimate"
+                    },
+                    {
+                        "name": "historyId",
+                        "type": "text",
+                        "label": "History ID"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "openai-gpt-3:askAnything",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "model": "gpt-5-nano",
+                "textPrompt": "You are an AI job application tracker assistant. Analyze the provided job vacancy email and candidate skills.\r\n\r\nCandidate Skills: Java, MERN, Flutter, Python, SQL, Git, AI/ML, REST APIs.\r\n\r\nYou MUST reply ONLY with a valid JSON object. Do not include markdown formatting or extra text outside JSON.\r\n\r\nJSON Format:\r\n{\r\n  \"company\": \"Company name\",\r\n  \"job_title\": \"Job title\",\r\n  \"job_url\": \"Extract URL or 'N/A'\",\r\n  \"required_skills\": \"Comma separated list of required skills\",\r\n  \"match_score\": \"Always include percent symbol, e.g., 70%\",\r\n  \"missing_skills\": \"Comma separated list of missing skills\",\r\n  \"summary\": \"Short overall summary and advice\"\r\n}\r\n\r\nJob Vacancy Email Content: {{1.fullTextBody}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 317,
+                    "y": -155
+                },
+                "setupValidation": {
+                    "version": 1,
+                    "configuration": "cf5ef2687bd59e52",
+                    "result": {
+                        "valid": true,
+                        "fields": []
+                    }
+                },
+                "restore": {
+                    "expect": {
+                        "model": {
+                            "label": "GPT-5 nanoThe most cost-effective option for casual conversation and straightforward, simple fact-retrieval"
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "gpt-5-nano",
+                                "gpt-6-sol",
+                                "gpt-6-luna",
+                                "gpt-6-astra",
+                                "gpt-5.6-sol",
+                                "gpt-5.6-terra",
+                                "gpt-5.6-luna",
+                                "gpt-5.5",
+                                "gpt-5.4-nano",
+                                "gpt-5.4-mini",
+                                "gpt-5.4",
+                                "gpt-5.2",
+                                "gpt-5.1",
+                                "gpt-5",
+                                "gpt-5-mini"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "textPrompt",
+                        "type": "text",
+                        "label": "Text prompt",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "module": "json:ParseJSON",
+            "version": 1,
+            "parameters": {},
+            "filter": null,
+            "mapper": {
+                "json": "{{4.result}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 698,
+                    "y": -6
+                },
+                "setupValidation": {
+                    "version": 1,
+                    "configuration": "7f7205ddb0351bb9",
+                    "result": {
+                        "valid": true,
+                        "fields": []
+                    }
+                },
+                "restore": {},
+                "parameters": [
+                    {
+                        "name": "type",
+                        "type": "udt",
+                        "label": "Data structure"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "json",
+                        "type": "text",
+                        "label": "JSON string",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "google-sheets:addRow",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 11377065
+            },
+            "mapper": {
+                "mode": "select",
+                "insertUnformatted": false,
+                "valueInputOption": "USER_ENTERED",
+                "insertDataOption": "INSERT_ROWS",
+                "from": "drive",
+                "spreadsheetId": "/1FP8I-Zq5BspPpdFkzDKe-BJ8Jd187ergEH2oAGT85Bk",
+                "sheetId": "Sheet1",
+                "includesHeaders": true,
+                "useColumnHeaders": false,
+                "values": {
+                    "0": "{{1.internalDate}}",
+                    "1": "{{10.company}}",
+                    "2": "{{10.job_title}}",
+                    "3": "{{10.job_url}}",
+                    "4": "{{10.required_skills}}",
+                    "5": "{{10.match_score}}",
+                    "6": "{{10.missing_skills}}",
+                    "7": "{{10.summary}}",
+                    "8": "Not Applied"
+                }
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1001,
+                    "y": -177
+                },
+                "setupValidation": {
+                    "version": 1,
+                    "configuration": "a5652ad80d025d80",
+                    "result": {
+                        "valid": true,
+                        "fields": []
+                    }
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Hirusha's Google connection (learnmastermind565@gmail.com)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "mode": {
+                            "label": "Search by path"
+                        },
+                        "insertUnformatted": {
+                            "mode": "chose"
+                        },
+                        "valueInputOption": {
+                            "mode": "chose",
+                            "label": "User entered"
+                        },
+                        "insertDataOption": {
+                            "mode": "chose",
+                            "label": "Insert rows"
+                        },
+                        "from": {
+                            "label": "My Drive"
+                        },
+                        "spreadsheetId": {
+                            "path": [
+                                "AI Job Application Tracker"
+                            ]
+                        },
+                        "sheetId": {
+                            "label": "Sheet1"
+                        },
+                        "includesHeaders": {
+                            "label": "Yes"
+                        },
+                        "useColumnHeaders": {
+                            "label": "No"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "mode",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "select",
+                                "fromAll",
+                                "map"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "insertUnformatted",
+                        "type": "boolean",
+                        "label": "Unformatted",
+                        "required": true
+                    },
+                    {
+                        "name": "valueInputOption",
+                        "type": "select",
+                        "label": "Value input option",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "USER_ENTERED",
+                                "RAW"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "insertDataOption",
+                        "type": "select",
+                        "label": "Insert data option",
+                        "validate": {
+                            "enum": [
+                                "INSERT_ROWS",
+                                "OVERWRITE"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "Drive",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share",
+                                "team"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "file",
+                        "label": "Spreadsheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "select",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "useColumnHeaders",
+                        "type": "select",
+                        "label": "Use column headers as IDs of the columns",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "values",
+                        "type": "collection",
+                        "label": "Values in columns",
+                        "metadata": [
+                            [
+                                [
+                                    "Date",
+                                    "Company",
+                                    "Job Title",
+                                    "Job URL",
+                                    "Required Skills",
+                                    "Match Score",
+                                    "Missing Skills",
+                                    "AI Summary",
+                                    "Status"
+                                ]
+                            ]
+                        ],
+                        "spec": [
+                            {
+                                "name": "0",
+                                "type": "text",
+                                "label": "Date (A)"
+                            },
+                            {
+                                "name": "1",
+                                "type": "text",
+                                "label": "Company (B)"
+                            },
+                            {
+                                "name": "2",
+                                "type": "text",
+                                "label": "Job Title (C)"
+                            },
+                            {
+                                "name": "3",
+                                "type": "text",
+                                "label": "Job URL (D)"
+                            },
+                            {
+                                "name": "4",
+                                "type": "text",
+                                "label": "Required Skills (E)"
+                            },
+                            {
+                                "name": "5",
+                                "type": "text",
+                                "label": "Match Score (F)"
+                            },
+                            {
+                                "name": "6",
+                                "type": "text",
+                                "label": "Missing Skills (G)"
+                            },
+                            {
+                                "name": "7",
+                                "type": "text",
+                                "label": "AI Summary (H)"
+                            },
+                            {
+                                "name": "8",
+                                "type": "text",
+                                "label": "Status (I)"
+                            },
+                            {
+                                "name": "9",
+                                "type": "text",
+                                "label": "(J)"
+                            },
+                            {
+                                "name": "10",
+                                "type": "text",
+                                "label": "(K)"
+                            },
+                            {
+                                "name": "11",
+                                "type": "text",
+                                "label": "(L)"
+                            },
+                            {
+                                "name": "12",
+                                "type": "text",
+                                "label": "(M)"
+                            },
+                            {
+                                "name": "13",
+                                "type": "text",
+                                "label": "(N)"
+                            },
+                            {
+                                "name": "14",
+                                "type": "text",
+                                "label": "(O)"
+                            },
+                            {
+                                "name": "15",
+                                "type": "text",
+                                "label": "(P)"
+                            },
+                            {
+                                "name": "16",
+                                "type": "text",
+                                "label": "(Q)"
+                            },
+                            {
+                                "name": "17",
+                                "type": "text",
+                                "label": "(R)"
+                            },
+                            {
+                                "name": "18",
+                                "type": "text",
+                                "label": "(S)"
+                            },
+                            {
+                                "name": "19",
+                                "type": "text",
+                                "label": "(T)"
+                            },
+                            {
+                                "name": "20",
+                                "type": "text",
+                                "label": "(U)"
+                            },
+                            {
+                                "name": "21",
+                                "type": "text",
+                                "label": "(V)"
+                            },
+                            {
+                                "name": "22",
+                                "type": "text",
+                                "label": "(W)"
+                            },
+                            {
+                                "name": "23",
+                                "type": "text",
+                                "label": "(X)"
+                            },
+                            {
+                                "name": "24",
+                                "type": "text",
+                                "label": "(Y)"
+                            },
+                            {
+                                "name": "25",
+                                "type": "text",
+                                "label": "(Z)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 12,
+            "module": "telegram:SendReplyMessage",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 11393720
+            },
+            "mapper": {
+                "chatId": "1385741369",
+                "text": "🔔 New AI Job Match Analysis!\r\n\r\n🏢 Company: {{10.company}}\r\n💼 Position: {{10.job_title}}\r\n🎯 Match Score: {{10.match_score}}\r\n\r\n📊 Missing Skills:{{10.missing_skills}}\r\n\r\n\r\n💡 Summary:{{10.summary}}\r\n\r\n\r\n🔗 Job Link: {{10.job_url}}",
+                "messageThreadId": "",
+                "parseMode": "",
+                "replyToMessageId": "",
+                "replyMarkupAssembleType": "reply_markup_enter",
+                "replyMarkup": ""
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1336,
+                    "y": -29
+                },
+                "setupValidation": {
+                    "version": 1,
+                    "configuration": "e58ba182c042d704",
+                    "result": {
+                        "valid": true,
+                        "fields": []
+                    }
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Hirusha's Telegram Bot connection",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "telegram"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "parseMode": {
+                            "label": "Empty"
+                        },
+                        "disableNotification": {
+                            "mode": "chose"
+                        },
+                        "replyMarkupAssembleType": {
+                            "label": "Enter the Reply Markup"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:telegram",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "chatId",
+                        "type": "text",
+                        "label": "Chat ID",
+                        "required": true
+                    },
+                    {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Text",
+                        "required": true
+                    },
+                    {
+                        "name": "messageThreadId",
+                        "type": "number",
+                        "label": "Message Thread ID"
+                    },
+                    {
+                        "name": "parseMode",
+                        "type": "select",
+                        "label": "Parse Mode",
+                        "validate": {
+                            "enum": [
+                                "Markdown",
+                                "HTML"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "disableNotification",
+                        "type": "boolean",
+                        "label": "Disable Notifications"
+                    },
+                    {
+                        "name": "disableWebPagePreview",
+                        "type": "boolean",
+                        "label": "Disable Link Previews"
+                    },
+                    {
+                        "name": "replyToMessageId",
+                        "type": "number",
+                        "label": "Original Message ID"
+                    },
+                    {
+                        "name": "replyMarkupAssembleType",
+                        "type": "select",
+                        "label": "Enter/Assemble the Reply Markup Field",
+                        "validate": {
+                            "enum": [
+                                "reply_markup_enter",
+                                "reply_markup_assemble"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "replyMarkup",
+                        "type": "text",
+                        "label": "Reply Markup"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.make.com",
+        "notes": []
+    }
+}
